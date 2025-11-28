@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Button Popup Example</title>
+		<style>
+			html,body{height:100%;margin:0}
+			.center{height:100%;display:flex;align-items:center;justify-content:center;background:#f7f7f7;font-family:Segoe UI, Roboto, Arial, sans-serif}
+			/* Fun, colorful button styles */
+			button{
+				--c1:#ff7a18; --c2:#af002d;
+				padding:18px 40px;
+				font-size:20px;
+				font-weight:800;
+				color:#fff;
+				background:linear-gradient(135deg,var(--c1),var(--c2));
+				border:none;
+				border-radius:14px;
+				box-shadow:0 10px 30px rgba(175,0,45,0.25), 0 4px 8px rgba(0,0,0,0.08);
+				cursor:pointer;
+				transition:transform .14s ease, box-shadow .14s ease, filter .14s ease;
+				letter-spacing:0.6px;
+				text-shadow:0 1px 0 rgba(0,0,0,0.15);
+			}
+
+			button:hover{
+				transform:translateY(-4px) scale(1.03);
+				filter:brightness(1.03);
+				box-shadow:0 14px 36px rgba(175,0,45,0.32), 0 6px 12px rgba(0,0,0,0.12);
+			}
+
+			button:active{
+				transform:translateY(0) scale(.99);
+				box-shadow:0 6px 14px rgba(175,0,45,0.20);
+			}
+
+			button:focus{
+				outline:3px solid rgba(255,255,255,0.18);
+				outline-offset:4px;
+				box-shadow:0 0 0 6px rgba(255,122,24,0.10);
+			}
+
+			@keyframes pulse {
+				0%{box-shadow:0 10px 30px rgba(175,0,45,0.18)}
+				50%{box-shadow:0 16px 40px rgba(175,0,45,0.24)}
+				100%{box-shadow:0 10px 30px rgba(175,0,45,0.18)}
+			}
+
+			.pulse{animation:pulse 3s ease-in-out infinite}
+			/* helper classes for sequence behavior */
+			.hidden{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px) scale(.98);transition:opacity .18s ease, transform .18s ease, visibility .18s}
+			.show{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .22s ease, transform .22s ease}
+			.to-right{transform:translateX(0px)}
+			.to-left{transform:translateX(-0px)}
+			.stack{display:flex;gap:1px;align-items:center;justify-content:center;flex-direction:column}
+			.final{font-size:22px;font-weight:700;color:#222;background:linear-gradient(90deg,#fff,#f1f1f1);padding:18px 20px;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.06)}
+		</style>
+	</head>
+	<body>
+			<div class="center">
+				<div class="stack">
+					<button id="btn1" class="pulse" type="button">Klikni me</button>
+					<button id="btn2" class="pulse hidden to-right" type="button">Opet me klikni</button>
+					<button id="btn3" class="pulse hidden to-left" type="button">još jednom</button>
+					<div id="finalMsg" class="final hidden">Dobar dečko</div>
+				</div>
+			</div>
+
+		<script>
+			// sequential button flow: btn1 -> btn2 (right) -> btn3 (left) -> final message
+			document.addEventListener('DOMContentLoaded', function () {
+				const btn1 = document.getElementById('btn1');
+				const btn2 = document.getElementById('btn2');
+				const btn3 = document.getElementById('btn3');
+				const finalMsg = document.getElementById('finalMsg');
+
+				function show(el){ el.classList.remove('hidden'); el.classList.add('show'); }
+				function hide(el){ el.classList.remove('show'); el.classList.add('hidden'); }
+
+				btn1.addEventListener('click', function (){
+					hide(btn1);
+					// small delay so hide transition starts before show
+					setTimeout(()=> show(btn2), 140);
+				});
+
+				btn2.addEventListener('click', function (){
+					hide(btn2);
+					setTimeout(()=> show(btn3), 140);
+				});
+
+				btn3.addEventListener('click', function (){
+					hide(btn3);
+					setTimeout(()=> show(finalMsg), 160);
+				});
+			});
+		</script>
+	</body>
+</html>
+
